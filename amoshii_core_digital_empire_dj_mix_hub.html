@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMOSHII CORE // Digital Empire & DJ Mix Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* =====================================================================
+           DYNAMIC THEME ENGINE & SMOOTH APPEARANCE TRANSITIONS
+           ===================================================================== */
+        :root {
+            --bg-main: #070B14;
+            --bg-surface: #0E1525;
+            --bg-card: rgba(15, 23, 42, 0.84);
+            --bg-input: #090E1A;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.09);
+            --accent: #00F0FF;
+            --accent-secondary: #6366F1;
+            --accent-contrast: #060A12;
+            --glow-primary: rgba(0, 240, 255, 0.18);
+            --glow-secondary: rgba(99, 102, 241, 0.16);
+        }
+
+        html.light-mode {
+            --bg-main: #F1F5F9;
+            --bg-surface: #FFFFFF;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-input: #F8FAFC;
+            --text-main: #0F172A;
+            --text-muted: #475569;
+            --border-color: rgba(15, 23, 42, 0.10);
+            --accent-contrast: #FFFFFF;
+        }
+
+        [data-theme="cyber-neon"] {
+            --accent: #00F0FF;
+            --accent-secondary: #6366F1;
+            --accent-contrast: #060A12;
+            --glow-primary: rgba(0, 240, 255, 0.18);
+            --glow-secondary: rgba(99, 102, 241, 0.16);
+        }
+        html.light-mode[data-theme="cyber-neon"] {
+            --accent: #0284C7;
+            --accent-secondary: #4F46E5;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(2, 132, 199, 0.14);
+            --glow-secondary: rgba(79, 70, 229, 0.12);
+        }
+
+        [data-theme="royal-gold"] {
+            --accent: #F59E0B;
+            --accent-secondary: #D97706;
+            --accent-contrast: #09090B;
+            --glow-primary: rgba(245, 158, 11, 0.20);
+            --glow-secondary: rgba(217, 119, 6, 0.16);
+        }
+        html.light-mode[data-theme="royal-gold"] {
+            --accent: #B45309;
+            --accent-secondary: #D97706;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(180, 83, 9, 0.14);
+            --glow-secondary: rgba(217, 119, 6, 0.12);
+        }
+
+        [data-theme="emerald-matrix"] {
+            --accent: #10B981;
+            --accent-secondary: #059669;
+            --accent-contrast: #04130D;
+            --glow-primary: rgba(16, 185, 129, 0.20);
+            --glow-secondary: rgba(5, 150, 105, 0.16);
+        }
+        html.light-mode[data-theme="emerald-matrix"] {
+            --accent: #047857;
+            --accent-secondary: #10B981;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(4, 120, 87, 0.14);
+            --glow-secondary: rgba(16, 185, 129, 0.12);
+        }
+
+        [data-theme="crimson-pulse"] {
+            --accent: #F43F5E;
+            --accent-secondary: #E11D48;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(244, 63, 94, 0.20);
+            --glow-secondary: rgba(225, 29, 72, 0.16);
+        }
+        html.light-mode[data-theme="crimson-pulse"] {
+            --accent: #E11D48;
+            --accent-secondary: #BE123C;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(225, 29, 72, 0.14);
+            --glow-secondary: rgba(190, 18, 60, 0.12);
+        }
+
+        [data-theme="sunset-violet"] {
+            --accent: #A855F7;
+            --accent-secondary: #EC4899;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(168, 85, 247, 0.22);
+            --glow-secondary: rgba(236, 72, 153, 0.16);
+        }
+        html.light-mode[data-theme="sunset-violet"] {
+            --accent: #7E22CE;
+            --accent-secondary: #DB2777;
+            --accent-contrast: #FFFFFF;
+            --glow-primary: rgba(126, 34, 206, 0.14);
+            --glow-secondary: rgba(219, 39, 119, 0.12);
+        }
+
+        body, .theme-card, .theme-nav, .theme-input, .theme-surface {
+            transition:
+                background-color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                color 0.45s ease,
+                border-color 0.5s ease,
+                box-shadow 0.55s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            background-image:
+                radial-gradient(circle at 12% 12%, var(--glow-primary) 0%, transparent 42%),
+                radial-gradient(circle at 88% 82%, var(--glow-secondary) 0%, transparent 42%);
+            background-attachment: fixed;
+        }
+
+        .theme-nav {
+            background-color: color-mix(in srgb, var(--bg-main) 84%, transparent);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .theme-card {
+            background-color: var(--bg-card);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-card:hover {
+            border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+            box-shadow: 0 14px 34px -12px var(--glow-primary);
+            transform: translateY(-2px);
+        }
+
+        .theme-surface {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-input {
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--glow-primary);
+        }
+
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); color: var(--accent-contrast); }
+        .bg-accent-soft {
+            background-color: color-mix(in srgb, var(--accent) 14%, transparent);
+            border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+            color: var(--accent);
+        }
+        .border-accent { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+        .gradient-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: var(--accent-contrast);
+        }
+        .text-gradient-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #theme-sweep-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            background: radial-gradient(circle at var(--sweep-x, 50%) var(--sweep-y, 50%), var(--accent) 0%, transparent 72%);
+            transform: scale(0.2);
+        }
+        #theme-sweep-overlay.sweeping {
+            animation: themeSweepAnim 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes themeSweepAnim {
+            0% { opacity: 0.36; transform: scale(0.15); }
+            55% { opacity: 0.22; transform: scale(1.35); }
+            100% { opacity: 0; transform: scale(1.8); }
+        }
+
+        .tab-panel {
+            animation: panelSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes panelSlideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body data-theme="cyber-neon" class="min-h-screen flex flex-col antialiased">
+
+    <div id="theme-sweep-overlay"></div>
+
+    <!-- =====================================================================
+         HEADER & TABS
+         ===================================================================== -->
+    <header class="theme-nav sticky top-0 z-40 w-full">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 border-b" style="border-color: var(--border-color);">
+                <div onclick="switchTab('home')" class="flex items-center gap-2.5 sm:gap-3 cursor-pointer group">
+                    <div class="w-10 h-10 rounded-xl gradient-accent p-[2px] shadow-md group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full rounded-[10px] flex items-center justify-center" style="background-color: var(--bg-main);">
+                            <i class="fa-solid fa-crown text-accent text-base sm:text-lg"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold tracking-tight text-base sm:text-xl">AMOSHII <span class="text-accent">CORE</span></span>
+                        </div>
+                        <p class="text-[10px] sm:text-[11px] font-mono tracking-wide" style="color: var(--text-muted);">Digital Empire & DJ Mix Hub</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1.5 sm:gap-2.5">
+                    <div class="hidden md:flex items-center p-1 rounded-xl theme-surface">
+                        <button onclick="setAppearanceMode('dark', event)" data-mode-btn="dark" class="mode-pill px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all">
+                            <i class="fa-solid fa-moon"></i><span>Dark</span>
+                        </button>
+                        <button onclick="setAppearanceMode('light', event)" data-mode-btn="light" class="mode-pill px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all">
+                            <i class="fa-solid fa-sun"></i><span>Light</span>
+                        </button>
+                        <button onclick="setAppearanceMode('system', event)" data-mode-btn="system" class="mode-pill px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all">
+                            <i class="fa-solid fa-desktop"></i><span>System</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center p-1 rounded-xl theme-surface">
+                        <button id="curr-kes" onclick="setCurrency('KES')" class="px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-mono font-bold transition-all bg-accent">KES</button>
+                        <button id="curr-usd" onclick="setCurrency('USD')" class="px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-mono font-bold transition-all" style="color: var(--text-muted);">USD</button>
+                    </div>
+
+                    <button onclick="toggleSettingsDrawer(true)" class="p-2.5 rounded-xl theme-surface hover:border-accent transition-all flex items-center gap-1.5" title="Customize Theme">
+                        <i class="fa-solid fa-gear text-accent text-sm sm:text-base animate-[spin_10s_linear_infinite]"></i>
+                        <span class="hidden lg:inline text-xs font-semibold">Themes</span>
+                    </button>
+
+                    <a href="https://wa.me/254706181234?text=Hello%20Amoshii%20Core!%20I%20visited%20your%20website%20and%20need%20assistance." target="_blank" rel="noopener noreferrer" class="px-3 sm:px-3.5 py-2 rounded-xl gradient-accent font-bold text-xs flex items-center gap-1.5 shadow-md hover:opacity-90 transition-opacity">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span class="hidden sm:inline">WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+
+            <nav class="flex items-center gap-1.5 py-2.5 overflow-x-auto no-scrollbar">
+                <button data-tab="home" onclick="switchTab('home')" class="nav-tab active flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-accent-soft border">
+                    <i class="fa-solid fa-house"></i><span>Home</span>
+                </button>
+                <button data-tab="billing" onclick="switchTab('billing')" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border border-transparent" style="color: var(--text-muted);">
+                    <i class="fa-solid fa-tv"></i><span>Billing</span>
+                </button>
+                <button data-tab="otp-bots" onclick="switchTab('otp-bots')" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border border-transparent" style="color: var(--text-muted);">
+                    <i class="fa-solid fa-sim-card"></i><span>OTP & WhatsApp Bots</span>
+                </button>
+                <button data-tab="smm-web" onclick="switchTab('smm-web')" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border border-transparent" style="color: var(--text-muted);">
+                    <i class="fa-solid fa-rocket"></i><span>SMM & Web Dev</span>
+                </button>
+                <button data-tab="apks" onclick="switchTab('apks')" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border border-transparent" style="color: var(--text-muted);">
+                    <i class="fa-brands fa-android"></i><span>APKs & Vault</span>
+                </button>
+                <button data-tab="dj-about" onclick="switchTab('dj-about')" class="nav-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all border border-transparent" style="color: var(--text-muted);">
+                    <i class="fa-solid fa-headphones"></i><span>DJ & Creator Hub</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN CONTENT
+         ===================================================================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- TAB 1: HOME -->
+        <section id="tab-home" class="tab-panel space-y-10">
+            <!-- Brand Banner -->
+            <div class="theme-card rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-soft border text-xs font-mono font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>AMOSHII CORE DIGITAL EMPIRE • 24/7 ACTIVE</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                            Welcome to <span class="text-gradient-accent">AMOSHII CORE</span> — Digital Services & DJ Mix Hub.
+                        </h1>
+                        <p class="text-sm sm:text-base leading-relaxed max-w-2xl" style="color: var(--text-muted);">
+                            Your ultimate hub for verified streaming & Heroku billing, virtual OTP verifications, WhatsApp bots, SMM growth, custom websites, entertainment APKs, and DJ Prince Amonje mixes.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-3 pt-2">
+                            <button onclick="switchTab('billing')" class="px-5 py-3.5 rounded-2xl gradient-accent font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-95 transition-opacity flex items-center gap-2">
+                                <i class="fa-solid fa-bolt"></i><span>Explore Billings</span>
+                            </button>
+                            <button onclick="switchTab('dj-about')" class="px-5 py-3.5 rounded-2xl theme-surface hover:border-accent font-bold text-xs sm:text-sm transition-all flex items-center gap-2">
+                                <i class="fa-brands fa-youtube text-rose-500 text-base"></i><span>Listen to DJ Mixes</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5">
+                        <div class="theme-surface rounded-3xl p-6 border-accent space-y-5 relative overflow-hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="px-3 py-1 rounded-full bg-sky-500/15 text-sky-400 border border-sky-400/30 text-[11px] font-mono font-bold">OFFICIAL TECH CHANNEL</span>
+                                <i class="fa-brands fa-telegram text-3xl text-sky-400"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-extrabold">@underground_techs</h2>
+                                <p class="text-xs sm:text-sm mt-2 leading-relaxed" style="color: var(--text-muted);">Join my Telegram channel for instant APK drops, working streaming tricks, bot scripts, and flash promos.</p>
+                            </div>
+                            <a href="https://t.me/underground_techs" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-5 rounded-2xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20">
+                                <i class="fa-brands fa-telegram text-lg"></i><span>Open @underground_techs Now</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct-Click Socials Grid (Tap to open exact account) -->
+            <div>
+                <div class="mb-5">
+                    <span class="text-xs font-mono text-accent uppercase tracking-wider">TAP-TO-OPEN DIRECT SOCIALS</span>
+                    <h2 class="text-2xl font-extrabold mt-0.5">Connect With Amoshii Instantly</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="https://instagram.com/amoshii_4k" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-pink-500/15 border border-pink-500/35 flex items-center justify-center text-pink-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">Instagram</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@amoshii_4k</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to open →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://tiktok.com/@rastiano_dior" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/35 flex items-center justify-center text-cyan-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-tiktok"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">TikTok</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@rastiano_dior</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to open →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://wa.me/254706181234" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5"><span class="font-bold text-sm truncate">WhatsApp Main</span></div>
+                            <div class="text-xs font-mono text-accent mt-0.5">0706181234</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to chat →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://wa.me/254781237875" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-500/15 border border-teal-500/35 flex items-center justify-center text-teal-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5"><span class="font-bold text-sm truncate">WhatsApp Backup</span></div>
+                            <div class="text-xs font-mono text-accent mt-0.5">0781237875</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to chat →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://facebook.com/Hii Amoshii" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/35 flex items-center justify-center text-indigo-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-facebook"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">Facebook</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@Hii Amoshii</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to open →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://t.me/rastianoamonje" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/35 flex items-center justify-center text-blue-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">Telegram DM</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@rastianoamonje</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to open →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://t.me/underground_techs" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-500/35 flex items-center justify-center text-sky-400 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">Tech Channel</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@underground_techs</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to join →</div>
+                        </div>
+                    </a>
+
+                    <a href="https://youtube.com/@prince_amonje" target="_blank" rel="noopener noreferrer" class="theme-card p-5 rounded-2xl flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/35 flex items-center justify-center text-rose-500 text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-sm truncate">YouTube Mixes</div>
+                            <div class="text-xs font-mono text-accent mt-0.5 truncate">@prince_amonje</div>
+                            <div class="text-[11px] mt-0.5" style="color: var(--text-muted);">Tap to subscribe →</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: BILLING & SUBSCRIPTIONS -->
+        <section id="tab-billing" class="tab-panel hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-5" style="border-color: var(--border-color);">
+                <div>
+                    <span class="text-xs font-mono text-accent uppercase tracking-wider">VERIFIED ACCOUNT & SUBSCRIPTION BILLING</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Streaming & Cloud Billing</h2>
+                    <p class="text-xs sm:text-sm mt-1" style="color: var(--text-muted);">Toggle KES / USD anytime in the header. Tap any plan to order instantly via WhatsApp.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Netflix -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 px-3.5 py-1 bg-rose-600 text-white text-[10px] font-mono font-extrabold rounded-bl-2xl">PREMIUM 4K UHD</div>
+                    <div>
+                        <div class="flex items-center gap-3.5 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-rose-600/20 border border-rose-500/40 flex items-center justify-center text-rose-500 text-2xl font-black">N</div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">Netflix Premium</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Ultra HD 4K Streaming</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs mb-6" style="color: var(--text-muted);">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> 4K Ultra HD + Dolby Atmos</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Works on Smart TV, Phone & PC</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Full Warranty & Offline Downloads</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3 pt-4 border-t" style="border-color: var(--border-color);">
+                        <div class="p-3.5 rounded-2xl theme-surface flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono" style="color: var(--text-muted);">1 MONTH PLAN</div>
+                                <div class="text-lg font-extrabold font-mono price-val" data-kes="300">300 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('Netflix Premium - 1 Month Plan', 300)" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors">Order 1 Mo</button>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface border-accent flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono text-accent font-bold">1 YEAR PLAN</div>
+                                <div class="text-lg font-extrabold font-mono text-accent price-val" data-kes="1500">1,500 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('Netflix Premium - 1 Year Plan', 1500)" class="px-3.5 py-2 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90">Order 1 Yr</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amazon Prime -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 px-3.5 py-1 bg-sky-500 text-slate-950 text-[10px] font-mono font-extrabold rounded-bl-2xl">PRIME UHD</div>
+                    <div>
+                        <div class="flex items-center gap-3.5 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-400 text-2xl"><i class="fa-brands fa-amazon"></i></div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">Amazon Prime Video</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Originals & Live Sports</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs mb-6" style="color: var(--text-muted);">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> 4K UHD + HDR Streaming</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Amazon Originals (The Boys, Fallout)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Offline Mobile Downloads</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3 pt-4 border-t" style="border-color: var(--border-color);">
+                        <div class="p-3.5 rounded-2xl theme-surface flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono" style="color: var(--text-muted);">1 MONTH PLAN</div>
+                                <div class="text-lg font-extrabold font-mono price-val" data-kes="200">200 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('Amazon Prime Video - 1 Month Plan', 200)" class="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition-colors">Order 1 Mo</button>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface border-accent flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono text-accent font-bold">6 MONTHS PLAN</div>
+                                <div class="text-lg font-extrabold font-mono text-accent price-val" data-kes="1000">1,000 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('Amazon Prime Video - 6 Months Plan', 1000)" class="px-3.5 py-2 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90">Order 6 Mo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YouTube Premium -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 px-3.5 py-1 bg-red-600 text-white text-[10px] font-mono font-extrabold rounded-bl-2xl">AD-FREE + MUSIC</div>
+                    <div>
+                        <div class="flex items-center gap-3.5 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 text-2xl"><i class="fa-brands fa-youtube"></i></div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">YouTube Premium</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">1 Month Individual or Family</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs mb-6" style="color: var(--text-muted);">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> 100% Ad-Free Videos & Music</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Background Play Support</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Offline Downloads</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3 pt-4 border-t" style="border-color: var(--border-color);">
+                        <div class="p-3.5 rounded-2xl theme-surface flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono" style="color: var(--text-muted);">INDIVIDUAL (1 MONTH)</div>
+                                <div class="text-lg font-extrabold font-mono price-val" data-kes="150">150 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('YouTube Premium - Individual 1 Month Plan', 150)" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-colors">Individual</button>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface border-accent flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono text-accent font-bold">FAMILY (1 MONTH)</div>
+                                <div class="text-lg font-extrabold font-mono text-accent price-val" data-kes="300">300 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('YouTube Premium - Family 1 Month Plan (Up to 5 Users)', 300)" class="px-3.5 py-2 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90">Family Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apple TV+ -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 px-3.5 py-1 bg-slate-200 text-slate-950 text-[10px] font-mono font-extrabold rounded-bl-2xl">1 YEAR PASS</div>
+                    <div>
+                        <div class="flex items-center gap-3.5 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-500/20 border border-slate-400/40 flex items-center justify-center text-2xl"><i class="fa-brands fa-apple"></i></div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">Apple TV+</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Full 1 Year Annual Pass</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs mb-6" style="color: var(--text-muted);">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Award-Winning Apple Originals</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> 4K Dolby Vision Streaming</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Ad-Free & Offline Downloads</li>
+                        </ul>
+                    </div>
+                    <div class="pt-4 border-t" style="border-color: var(--border-color);">
+                        <div class="p-4 rounded-2xl theme-surface border-accent flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono text-accent font-bold">1 YEAR FULL ACCESS</div>
+                                <div class="text-xl font-extrabold font-mono price-val" data-kes="1300">1,300 KES</div>
+                            </div>
+                            <button onclick="orderWhatsApp('Apple TV+ - 1 Year Subscription', 1300)" class="px-4 py-2.5 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90">Order 1 Year</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heroku Cloud -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden md:col-span-2 lg:col-span-2">
+                    <div class="absolute top-0 right-0 px-3.5 py-1 bg-purple-600 text-white text-[10px] font-mono font-extrabold rounded-bl-2xl">DEVELOPER CLOUD</div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center h-full">
+                        <div class="md:col-span-7">
+                            <div class="flex items-center gap-3.5 mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-400 text-2xl"><i class="fa-solid fa-server"></i></div>
+                                <div>
+                                    <h3 class="text-lg font-extrabold">Heroku Cloud Billing</h3>
+                                    <p class="text-xs" style="color: var(--text-muted);">24/7 Bot Hosting & App Dynos</p>
+                                </div>
+                            </div>
+                            <ul class="space-y-2 text-xs" style="color: var(--text-muted);">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Verified Billing Activation for WhatsApp Bots & APIs</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Eliminates International Card Declines Instantly</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-accent"></i> Supports Eco & Basic Dynos for 24/7 Uptime</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-5">
+                            <div class="p-5 rounded-2xl theme-surface border-accent space-y-3">
+                                <div class="text-[11px] font-mono text-accent font-bold">HEROKU BILLING PLAN</div>
+                                <div class="text-2xl font-extrabold font-mono price-val" data-kes="350">350 KES</div>
+                                <p class="text-[11px]" style="color: var(--text-muted);">Fast activation on your account.</p>
+                                <button onclick="orderWhatsApp('Heroku Cloud Billing Activation', 350)" class="w-full py-3 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90 flex items-center justify-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i><span>Activate Heroku Billing</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: OTP VERIFICATIONS & WHATSAPP BOTS -->
+        <section id="tab-otp-bots" class="tab-panel hidden space-y-8">
+            <div class="border-b pb-5" style="border-color: var(--border-color);">
+                <span class="text-xs font-mono text-accent uppercase tracking-wider">GLOBAL VIRTUAL NUMBERS & AUTOMATION</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">OTP Verifications & WhatsApp Bots</h2>
+                <p class="text-xs sm:text-sm mt-1" style="color: var(--text-muted);">Configure your virtual SMS number below or order your WhatsApp Bot (Normal: 100 KES | Bug Bot: 150 KES).</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- OTP Configurator -->
+                <div class="lg:col-span-7 theme-card rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-accent-soft border flex items-center justify-center text-xl"><i class="fa-solid fa-sim-card"></i></div>
+                        <div>
+                            <h3 class="text-xl font-extrabold">Virtual OTP Verification Builder</h3>
+                            <p class="text-xs" style="color: var(--text-muted);">16 Platforms • 52+ Countries Select Menu</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Platform -->
+                    <div>
+                        <label class="block text-xs font-mono font-bold text-accent uppercase mb-2.5">Step 1: Choose Platform</label>
+                        <div id="otp-site-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+                    </div>
+
+                    <!-- Step 2: Clean Country Select Dropdown -->
+                    <div>
+                        <label for="otp-country-dropdown" class="block text-xs font-mono font-bold text-accent uppercase mb-2">Step 2: Choose Country (52+ Countries)</label>
+                        <select id="otp-country-dropdown" onchange="updateOtpSummary()" class="w-full theme-input rounded-2xl px-4 py-3 text-xs sm:text-sm font-semibold cursor-pointer">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <div class="p-5 rounded-2xl theme-surface border-accent space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] font-mono" style="color: var(--text-muted);">YOUR OTP SELECTION</div>
+                                <div id="otp-selected-summary" class="text-base sm:text-lg font-extrabold mt-0.5">WhatsApp • Kenya (+254)</div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-mono font-bold">Non-VoIP Ready</span>
+                        </div>
+                        <button onclick="sendOtpToWhatsApp()" class="w-full py-3.5 px-5 rounded-2xl gradient-accent font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i><span>Request OTP & Ask Price on WhatsApp (0706181234)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Bots (Normal: 100 KES | Bug: 150 KES) -->
+                <div class="lg:col-span-5 theme-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 text-2xl"><i class="fa-brands fa-whatsapp"></i></div>
+                            <div>
+                                <h3 class="text-xl font-extrabold">WhatsApp Bot Deployment</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Normal & Bug Bots Available</p>
+                            </div>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-muted);">Deploy your custom WhatsApp bot instantly. Choose between our reliable Normal Bot or advanced Bug Bot below.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- Normal Bot: 100 KES -->
+                        <div class="p-4 rounded-2xl theme-surface flex items-center justify-between gap-3">
+                            <div>
+                                <div class="text-[11px] font-mono text-emerald-400 font-bold">NORMAL BOT</div>
+                                <div class="text-lg font-extrabold font-mono price-val" data-kes="100">100 KES</div>
+                                <div class="text-[11px]" style="color: var(--text-muted);">Auto-reply, group guard & tools</div>
+                            </div>
+                            <button onclick="orderWhatsApp('WhatsApp Normal Bot Deployment', 100)" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition-colors shrink-0">Order 100 KES</button>
+                        </div>
+
+                        <!-- Bug Bot: 150 KES -->
+                        <div class="p-4 rounded-2xl theme-surface border-accent flex items-center justify-between gap-3">
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[11px] font-mono text-accent font-bold">BUG BOT</span>
+                                    <span class="px-1.5 py-0.5 rounded bg-accent-soft text-[9px] font-mono font-bold">ADVANCED</span>
+                                </div>
+                                <div class="text-lg font-extrabold font-mono text-accent price-val" data-kes="150">150 KES</div>
+                                <div class="text-[11px]" style="color: var(--text-muted);">Heavy automation & control tools</div>
+                            </div>
+                            <button onclick="orderWhatsApp('WhatsApp Bug Bot Deployment', 150)" class="px-4 py-2.5 rounded-xl gradient-accent font-extrabold text-xs transition-opacity hover:opacity-90 shrink-0">Order 150 KES</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: SMM & WEB DEVELOPMENT -->
+        <section id="tab-smm-web" class="tab-panel hidden space-y-12">
+            <!-- SMM Builder -->
+            <div class="space-y-6">
+                <div class="border-b pb-5" style="border-color: var(--border-color);">
+                    <span class="text-xs font-mono text-accent uppercase tracking-wider">SOCIAL MEDIA GROWTH</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">SMM Boost Configurator</h2>
+                    <p class="text-xs sm:text-sm mt-1" style="color: var(--text-muted);">Pick platform, service, and tier (CHEAP vs NON-DROP), then request pricing via WhatsApp.</p>
+                </div>
+
+                <div class="theme-card rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div>
+                        <label class="block text-xs font-mono font-bold text-accent uppercase mb-2.5">1. Select Social Platform</label>
+                        <div id="smm-platform-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="smm-service-select" class="block text-xs font-mono font-bold text-accent uppercase mb-2">2. Select Service Type</label>
+                            <select id="smm-service-select" onchange="updateSmmPreview()" class="w-full theme-input rounded-2xl px-4 py-3.5 text-sm font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono font-bold text-accent uppercase mb-2">3. Select Quality Tier</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" id="tier-cheap" onclick="setSmmTier('CHEAP')" class="p-3 rounded-2xl border text-left transition-all border-accent bg-accent-soft">
+                                    <div class="font-extrabold text-xs sm:text-sm">⚡ CHEAP</div>
+                                    <div class="text-[11px] opacity-85">Budget fast boost</div>
+                                </button>
+                                <button type="button" id="tier-nondrop" onclick="setSmmTier('NON-DROP')" class="p-3 rounded-2xl border text-left transition-all theme-surface">
+                                    <div class="font-extrabold text-xs sm:text-sm">🛡️ NON-DROP</div>
+                                    <div class="text-[11px]" style="color: var(--text-muted);">Guaranteed retention</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="smm-qty-input" class="block text-xs font-mono mb-1.5" style="color: var(--text-muted);">Desired Quantity (Optional)</label>
+                            <input id="smm-qty-input" type="text" oninput="updateSmmPreview()" placeholder="e.g. 1,000 or 5,000" class="w-full theme-input rounded-xl px-4 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label for="smm-link-input" class="block text-xs font-mono mb-1.5" style="color: var(--text-muted);">Profile / Post Link or @Username (Optional)</label>
+                            <input id="smm-link-input" type="text" oninput="updateSmmPreview()" placeholder="e.g. @yourhandle or post URL" class="w-full theme-input rounded-xl px-4 py-3 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl theme-surface border-accent flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="text-[11px] font-mono text-accent uppercase">READY TO INQUIRE</div>
+                            <div id="smm-summary-text" class="text-base sm:text-lg font-extrabold mt-0.5">Instagram • Followers (CHEAP Tier)</div>
+                        </div>
+                        <button onclick="sendSmmToWhatsApp()" class="px-6 py-3.5 rounded-2xl gradient-accent font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-95 transition-opacity flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-brands fa-whatsapp text-lg"></i><span>Ask Price on WhatsApp (0706181234)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Dev Tiers -->
+            <div class="space-y-6">
+                <div class="border-b pb-5" style="border-color: var(--border-color);">
+                    <span class="text-xs font-mono text-accent uppercase tracking-wider">CUSTOM WEBSITES & WEB APPS</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Web Development Packages</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Good -->
+                    <div class="theme-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-mono font-extrabold">LEVEL 1 • GOOD</span>
+                                <i class="fa-solid fa-seedling text-emerald-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-extrabold">Starter & Portfolio Site</h3>
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-accent my-3 price-val" data-kes="4500">4,500 KES</div>
+                            <p class="text-xs leading-relaxed mb-5" style="color: var(--text-muted);">1-3 responsive pages, direct WhatsApp & social buttons, dark/light UI.</p>
+                        </div>
+                        <button onclick="orderWhatsApp('Web Development - GOOD Level (Starter & Portfolio Site)', 4500)" class="mt-6 w-full py-3.5 rounded-2xl theme-surface hover:border-accent font-extrabold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i><span>Order GOOD Package</span>
+                        </button>
+                    </div>
+
+                    <!-- Better -->
+                    <div class="theme-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between border-accent relative">
+                        <div class="absolute -top-3 right-6 px-3.5 py-1 rounded-full gradient-accent text-[10px] font-mono font-extrabold uppercase shadow">MOST POPULAR</div>
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-full bg-accent-soft border text-xs font-mono font-extrabold">LEVEL 2 • BETTER</span>
+                                <i class="fa-solid fa-fire text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-extrabold">Business & Storefront Pro</h3>
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-accent my-3 price-val" data-kes="12000">12,000 KES</div>
+                            <p class="text-xs leading-relaxed mb-5" style="color: var(--text-muted);">Up to 7 custom pages, product catalog, cart, SEO & speed optimization.</p>
+                        </div>
+                        <button onclick="orderWhatsApp('Web Development - BETTER Level (Business & Storefront Pro)', 12000)" class="mt-6 w-full py-3.5 rounded-2xl gradient-accent font-extrabold text-xs shadow-lg hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-base"></i><span>Order BETTER Package</span>
+                        </button>
+                    </div>
+
+                    <!-- Best -->
+                    <div class="theme-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-full bg-purple-500/15 text-purple-400 text-xs font-mono font-extrabold">LEVEL 3 • BEST</span>
+                                <i class="fa-solid fa-crown text-purple-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-extrabold">Full Custom Web App / Portal</h3>
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-accent my-3 price-val" data-kes="25000">25,000 KES</div>
+                            <p class="text-xs leading-relaxed mb-5" style="color: var(--text-muted);">Unlimited pages, admin dashboard, user database, payment gateway ready.</p>
+                        </div>
+                        <button onclick="orderWhatsApp('Web Development - BEST Level (Full Custom Web App / Portal)', 25000)" class="mt-6 w-full py-3.5 rounded-2xl theme-surface hover:border-accent font-extrabold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i><span>Order BEST Package</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: APKs & STREAMING VAULT -->
+        <section id="tab-apks" class="tab-panel hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-5" style="border-color: var(--border-color);">
+                <div>
+                    <span class="text-xs font-mono text-accent uppercase tracking-wider">ENTERTAINMENT & LIVE SPORTS VAULT</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Football, Movie & Anime APKs + Streaming Sites</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Football -->
+                <div class="theme-card rounded-3xl p-6 space-y-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 text-2xl"><i class="fa-solid fa-futbol"></i></div>
+                        <div>
+                            <h3 class="text-lg font-extrabold">Live Football & TV APKs</h3>
+                            <p class="text-xs" style="color: var(--text-muted);">EPL, UCL & Sports Channels</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-2xl theme-surface space-y-3">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">Cricfy TV v6.7 APK</span><span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 text-[10px] font-mono font-bold">ANDROID / TV</span></div>
+                            <a href="https://www.mediafire.com/file/n0qdpbgfgmt1i64/Cricfy_v6.7.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl gradient-accent font-extrabold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-download"></i><span>Download Cricfy v6.7</span>
+                            </a>
+                        </div>
+                        <div class="p-4 rounded-2xl theme-surface space-y-3">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">Sportzfy v32 APK</span><span class="px-2 py-0.5 rounded bg-accent-soft text-[10px] font-mono font-bold">FAST SERVERS</span></div>
+                            <a href="https://www.mediafire.com/file/rilbeum8amviord/Sportzfy_v32.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl theme-input hover:border-accent font-bold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-download text-accent"></i><span>Download Sportzfy v32</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movies -->
+                <div class="theme-card rounded-3xl p-6 space-y-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/35 flex items-center justify-center text-rose-400 text-2xl"><i class="fa-solid fa-film"></i></div>
+                        <div>
+                            <h3 class="text-lg font-extrabold">Movie APKs & Web Site</h3>
+                            <p class="text-xs" style="color: var(--text-muted);">Phone, Smart TV & Browser</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3.5 rounded-2xl theme-surface space-y-2.5">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">NetMirror v2.0.0 (Phone)</span><span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 text-[10px] font-mono font-bold">ANDROID</span></div>
+                            <a href="https://www.mediafire.com/file/s6pa5zy0fa5bcme/NetMirror-v2.0.0-android.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl gradient-accent font-extrabold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-mobile-screen"></i><span>Download Phone APK</span>
+                            </a>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface space-y-2.5">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">CineHD v1.1.4 Universal</span><span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 text-[10px] font-mono font-bold">PHONE</span></div>
+                            <a href="https://www.mediafire.com/file/6lfa8w8tspppdqp/CineHD-v1.1.4-%2528Universal%2529.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl theme-input hover:border-accent font-bold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-download text-accent"></i><span>Download CineHD APK</span>
+                            </a>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface space-y-2.5">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">NetMirror (Smart TV)</span><span class="px-2 py-0.5 rounded bg-purple-500/15 text-purple-400 text-[10px] font-mono font-bold">SMART TV</span></div>
+                            <a href="https://www.mediafire.com/file/swghn7keyizvk7d/NetMirror-v2.0.0-tv.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl theme-input hover:border-accent font-bold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-tv text-accent"></i><span>Download Smart TV APK</span>
+                            </a>
+                        </div>
+                        <div class="p-3.5 rounded-2xl theme-surface border-accent space-y-2.5">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">Net77 Web Streaming</span><span class="px-2 py-0.5 rounded bg-accent-soft text-[10px] font-mono font-bold">WEB</span></div>
+                            <a href="https://net77.cc" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-globe"></i><span>Open Movie Site (net77.cc)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anime -->
+                <div class="theme-card rounded-3xl p-6 flex flex-col justify-between space-y-5">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/35 flex items-center justify-center text-purple-400 text-2xl"><i class="fa-solid fa-dragon"></i></div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">Anime APK & Web Site</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Ad-Free Streaming</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-2xl theme-surface space-y-3">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">Sankanime Ad-Free APK</span><span class="px-2 py-0.5 rounded bg-purple-500/15 text-purple-400 text-[10px] font-mono font-bold">NO ADS</span></div>
+                            <a href="https://www.mediafire.com/file/z1df1tsd7b4t8mf/Sankanime_Apk_Streaming_Anime_Komik_Novel_Tanpa_Iklan_Gratiss_Fix.apk/file" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl gradient-accent font-extrabold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-download"></i><span>Download Sankanime APK</span>
+                            </a>
+                        </div>
+                        <div class="p-4 rounded-2xl theme-surface border-accent space-y-3">
+                            <div class="flex items-center justify-between"><span class="font-bold text-sm">HiAnime Streaming Site</span><span class="px-2 py-0.5 rounded bg-accent-soft text-[10px] font-mono font-bold">WEB</span></div>
+                            <a href="https://hianime.lol/home" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-globe"></i><span>Visit HiAnime (hianime.lol)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: CREATOR HUB & SOCIALS (DJ PRINCE AMONJE) -->
+        <section id="tab-dj-about" class="tab-panel hidden space-y-10">
+            <!-- About Me -->
+            <div class="theme-card rounded-3xl p-6 sm:p-8 lg:p-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft border text-xs font-mono font-bold">
+                            <i class="fa-solid fa-user-astronaut"></i><span>ABOUT ME • TECH CREATOR & DJ</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold">Who I Am & What I Do — <span class="text-gradient-accent">Amoshii / DJ Prince Amonje</span></h2>
+                        <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-muted);">
+                            I am <strong>Amoshii</strong> (aka <strong class="text-accent">DJ Prince Amonje</strong>). I combine digital tech solutions with high-energy DJ music mixes. On the tech side, I run AMOSHII CORE and <strong>@underground_techs</strong>, providing verified streaming & Heroku billing, OTP verifications, WhatsApp bots, SMM, and websites. On the decks, I curate top Afrobeats and Amapiano mixes on <strong>@prince_amonje</strong>.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <div class="theme-surface rounded-3xl p-6 border-accent space-y-4 text-center">
+                            <div class="w-20 h-20 mx-auto rounded-3xl gradient-accent flex items-center justify-center text-3xl shadow-lg"><i class="fa-solid fa-headphones-simple"></i></div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">DJ Prince Amonje</h3>
+                                <p class="text-xs font-mono text-accent">@prince_amonje</p>
+                            </div>
+                            <a href="https://youtube.com/@prince_amonje?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition-colors shadow-lg shadow-rose-600/25">
+                                <i class="fa-brands fa-youtube text-base"></i><span>Subscribe on YouTube</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- YouTube Mix Player (3 Playable Mixes) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 theme-card rounded-3xl p-6 space-y-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <span class="text-xs font-mono text-accent uppercase">TRENDING DJ MIXES</span>
+                            <h3 class="text-xl font-extrabold">DJ Prince Amonje — On-Site Mix Player</h3>
+                        </div>
+                        <a id="watch-on-yt-btn" href="https://youtu.be/iATbeWKjmQo" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl theme-surface hover:border-accent text-xs font-bold flex items-center gap-1.5 transition-all">
+                            <i class="fa-brands fa-youtube text-rose-500"></i><span>Watch on YouTube</span>
+                        </a>
+                    </div>
+
+                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border" style="border-color: var(--border-color);">
+                        <iframe
+                            id="dj-yt-iframe"
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/iATbeWKjmQo"
+                            title="DJ Prince Amonje Mix Player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="pt-3 border-t" style="border-color: var(--border-color);">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-mono font-bold uppercase" style="color: var(--text-muted);">SELECT AMONG 3 TRENDING MIXES</span>
+                            <span class="text-[10px] font-mono text-emerald-400">● Click to Play on Site</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button type="button" onclick="playMix('iATbeWKjmQo', 'DJ Prince Amonje — Trending Mix 1', 'https://youtu.be/iATbeWKjmQo')" class="p-3.5 rounded-2xl theme-surface hover:border-accent text-left transition-all flex flex-col justify-between gap-2 group">
+                                <div class="flex items-center justify-between"><span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 text-[10px] font-mono font-bold">MIX 1</span><i class="fa-solid fa-circle-play text-accent text-base group-hover:scale-110"></i></div>
+                                <div class="text-xs font-bold">Trending Mix 1</div>
+                                <div class="text-[10px] font-mono" style="color: var(--text-muted);">youtu.be/iATbeWKjmQo</div>
+                            </button>
+
+                            <button type="button" onclick="playMix('iATbeWKjmQo', 'DJ Prince Amonje — Trending Mix 2', 'https://youtu.be/iATbeWKjmQo')" class="p-3.5 rounded-2xl theme-surface hover:border-accent text-left transition-all flex flex-col justify-between gap-2 group">
+                                <div class="flex items-center justify-between"><span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 text-[10px] font-mono font-bold">MIX 2</span><i class="fa-solid fa-circle-play text-accent text-base group-hover:scale-110"></i></div>
+                                <div class="text-xs font-bold">Trending Mix 2</div>
+                                <div class="text-[10px] font-mono" style="color: var(--text-muted);">youtu.be/iATbeWKjmQo</div>
+                            </button>
+
+                            <button type="button" onclick="playMix('rfC86COCnT0', 'DJ Prince Amonje — Trending Mix 3', 'https://youtu.be/rfC86COCnT0')" class="p-3.5 rounded-2xl theme-surface hover:border-accent text-left transition-all flex flex-col justify-between gap-2 group">
+                                <div class="flex items-center justify-between"><span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 text-[10px] font-mono font-bold">MIX 3</span><i class="fa-solid fa-circle-play text-accent text-base group-hover:scale-110"></i></div>
+                                <div class="text-xs font-bold">Trending Mix 3</div>
+                                <div class="text-[10px] font-mono" style="color: var(--text-muted);">youtu.be/rfC86COCnT0</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buy Me a Coffee (princeamonje@gmail.com) -->
+                <div class="lg:col-span-5 theme-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between border-accent space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 text-2xl"><i class="fa-solid fa-mug-hot"></i></div>
+                            <div>
+                                <h3 class="text-xl font-extrabold">Buy Me a Coffee ☕</h3>
+                                <p class="text-xs" style="color: var(--text-muted);">Support DJ Prince Amonje</p>
+                            </div>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-muted);">Support DJ mixes & free tech drops. Fuel the studio!</p>
+                        <div class="p-3.5 rounded-2xl theme-surface flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="text-[10px] font-mono" style="color: var(--text-muted);">CREATOR EMAIL</div>
+                                <div class="text-xs sm:text-sm font-mono font-bold text-accent truncate">princeamonje@gmail.com</div>
+                            </div>
+                            <button onclick="copyText('princeamonje@gmail.com', 'Email Copied!')" class="px-3 py-1.5 rounded-xl bg-accent-soft border text-xs font-mono font-bold shrink-0">Copy</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" onclick="selectCoffeeTier(150, '1 Coffee')" class="coffee-tier-btn py-2.5 px-2 rounded-xl font-mono font-bold text-xs border border-accent bg-accent-soft">☕ 1 Coffee<br>150 KES</button>
+                            <button type="button" onclick="selectCoffeeTier(450, '3 Coffees')" class="coffee-tier-btn py-2.5 px-2 rounded-xl font-mono font-bold text-xs theme-surface">☕ 3 Coffees<br>450 KES</button>
+                            <button type="button" onclick="selectCoffeeTier(750, '5 Coffees')" class="coffee-tier-btn py-2.5 px-2 rounded-xl font-mono font-bold text-xs theme-surface">🔥 5 Coffees<br>750 KES</button>
+                        </div>
+                        <input id="coffee-supporter-name" type="text" placeholder="Your Name / DJ Shoutout Handle" class="w-full theme-input rounded-xl px-3.5 py-2.5 text-xs">
+                    </div>
+                    <button onclick="supportViaWhatsApp()" class="w-full py-3.5 px-4 rounded-2xl gradient-accent font-extrabold text-xs shadow-lg hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i><span id="coffee-wa-label">Support via M-Pesa / WhatsApp (150 KES)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t mt-12" style="border-color: var(--border-color); background-color: var(--bg-surface);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style="color: var(--text-muted);">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-crown text-accent"></i>
+                <span class="font-extrabold" style="color: var(--text-main);">AMOSHII CORE</span>
+                <span>• Digital Services & DJ Prince Amonje</span>
+            </div>
+            <div class="flex items-center gap-4 font-mono">
+                <a href="https://wa.me/254706181234" target="_blank" class="hover:text-accent">Main: 0706181234</a>
+                <a href="https://wa.me/254781237875" target="_blank" class="hover:text-accent">Backup: 0781237875</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SETTINGS DRAWER -->
+    <div id="settings-drawer" class="fixed inset-0 z-50 hidden justify-end bg-black/60 backdrop-blur-sm">
+        <div class="theme-surface w-full max-w-sm h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl border-l" style="border-color: var(--border-color);">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between border-b pb-4" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-sliders text-accent text-lg"></i>
+                        <h3 class="text-lg font-extrabold">Appearance & Themes</h3>
+                    </div>
+                    <button onclick="toggleSettingsDrawer(false)" class="w-8 h-8 rounded-full theme-input flex items-center justify-center hover:border-accent"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono font-bold text-accent uppercase mb-2.5">1. Appearance Mode</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setAppearanceMode('dark', event)" data-mode-btn="dark" class="mode-pill py-3 px-2 rounded-2xl border text-xs font-bold flex flex-col items-center gap-1.5">
+                            <i class="fa-solid fa-moon text-base"></i><span>Dark</span>
+                        </button>
+                        <button onclick="setAppearanceMode('light', event)" data-mode-btn="light" class="mode-pill py-3 px-2 rounded-2xl border text-xs font-bold flex flex-col items-center gap-1.5">
+                            <i class="fa-solid fa-sun text-base"></i><span>Light</span>
+                        </button>
+                        <button onclick="setAppearanceMode('system', event)" data-mode-btn="system" class="mode-pill py-3 px-2 rounded-2xl border text-xs font-bold flex flex-col items-center gap-1.5">
+                            <i class="fa-solid fa-desktop text-base"></i><span>System</span>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono font-bold text-accent uppercase mb-2.5">2. Select Theme Style</label>
+                    <div class="space-y-2.5">
+                        <button onclick="setThemeStyle('cyber-neon', 'Cyber Neon', event)" data-theme-btn="cyber-neon" class="theme-style-btn w-full p-3.5 rounded-2xl border text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-gradient-to-tr from-[#00F0FF] to-[#6366F1]"></span><div><div class="text-sm font-bold">Cyber Neon</div><div class="text-[11px]" style="color: var(--text-muted);">Electric Cyan & Indigo</div></div></div>
+                        </button>
+                        <button onclick="setThemeStyle('royal-gold', 'Royal Gold', event)" data-theme-btn="royal-gold" class="theme-style-btn w-full p-3.5 rounded-2xl border text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-gradient-to-tr from-[#F59E0B] to-[#D97706]"></span><div><div class="text-sm font-bold">Royal Gold</div><div class="text-[11px]" style="color: var(--text-muted);">Warm Amber & Obsidian</div></div></div>
+                        </button>
+                        <button onclick="setThemeStyle('emerald-matrix', 'Emerald Matrix', event)" data-theme-btn="emerald-matrix" class="theme-style-btn w-full p-3.5 rounded-2xl border text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-gradient-to-tr from-[#10B981] to-[#059669]"></span><div><div class="text-sm font-bold">Emerald Matrix</div><div class="text-[11px]" style="color: var(--text-muted);">Hacker Green</div></div></div>
+                        </button>
+                        <button onclick="setThemeStyle('crimson-pulse', 'Crimson Pulse', event)" data-theme-btn="crimson-pulse" class="theme-style-btn w-full p-3.5 rounded-2xl border text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-gradient-to-tr from-[#F43F5E] to-[#E11D48]"></span><div><div class="text-sm font-bold">Crimson Pulse</div><div class="text-[11px]" style="color: var(--text-muted);">Ruby Red</div></div></div>
+                        </button>
+                        <button onclick="setThemeStyle('sunset-violet', 'Sunset Violet', event)" data-theme-btn="sunset-violet" class="theme-style-btn w-full p-3.5 rounded-2xl border text-left flex items-center justify-between">
+                            <div class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-gradient-to-tr from-[#A855F7] to-[#EC4899]"></span><div><div class="text-sm font-bold">Sunset Violet</div><div class="text-[11px]" style="color: var(--text-muted);">Purple & Magenta</div></div></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 24/7 AI ASSISTANT WIDGET -->
+    <div class="fixed bottom-4 right-4 z-40">
+        <div id="ai-chat-window" class="hidden mb-3 w-[calc(100vw-2rem)] sm:w-96 theme-surface rounded-3xl shadow-2xl border-accent overflow-hidden flex-col" style="max-height: 78vh;">
+            <div class="p-4 gradient-accent flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-black/20 flex items-center justify-center text-base"><i class="fa-solid fa-robot"></i></div>
+                    <div>
+                        <div class="font-extrabold text-sm leading-tight">AMOSHII AI Assistant</div>
+                        <div class="text-[11px] font-mono flex items-center gap-1.5 opacity-95">
+                            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-ping"></span><span>24/7 Online • Troubleshooter</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleAiChat()" class="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center"><i class="fa-solid fa-chevron-down text-xs"></i></button>
+            </div>
+
+            <div id="ai-messages" class="p-4 space-y-3 overflow-y-auto text-xs leading-relaxed" style="height: 310px;">
+                <div class="p-3 rounded-2xl rounded-tl-none theme-input space-y-1.5">
+                    <div class="font-bold text-accent">👋 Hello! I'm AMOSHII AI (24/7 Online).</div>
+                    <p>Ask me anything about APKs, billing, OTP, or WhatsApp bots. If you need a human agent, I will instantly provide Amoshii's direct WhatsApp numbers!</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleAiSubmit(event)" class="p-3 border-t flex items-center gap-2" style="border-color: var(--border-color);">
+                <input id="ai-input" type="text" placeholder="Describe your issue or question..." class="flex-grow theme-input rounded-xl px-3.5 py-2.5 text-xs">
+                <button type="submit" class="w-10 h-10 rounded-xl gradient-accent flex items-center justify-center shrink-0"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+            </form>
+        </div>
+
+        <button onclick="toggleAiChat()" class="ml-auto px-4 py-3 rounded-2xl gradient-accent font-extrabold text-xs sm:text-sm shadow-2xl flex items-center gap-2.5 hover:scale-105 transition-transform">
+            <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            </span>
+            <i class="fa-solid fa-robot text-base"></i><span>AI Support 24/7</span>
+        </button>
+    </div>
+
+    <div id="toast-box" class="fixed top-20 right-4 z-50 hidden items-center gap-3 px-4 py-3 rounded-2xl theme-surface border-accent shadow-2xl max-w-xs">
+        <i class="fa-solid fa-sparkles text-accent text-base"></i>
+        <div>
+            <div id="toast-title" class="text-xs font-extrabold">Notice</div>
+            <div id="toast-sub" class="text-[11px]" style="color: var(--text-muted);">Updated successfully</div>
+        </div>
+    </div>
+
+    <!-- SCRIPT ENGINE -->
+    <script>
+        const MAIN_WA = '254706181234';
+        const BACKUP_WA = '254781237875';
+        const KES_PER_USD = 129;
+
+        let currentCurrency = 'KES';
+        let currentMode = localStorage.getItem('amoshii_mode') || 'dark';
+        let currentTheme = localStorage.getItem('amoshii_theme') || 'cyber-neon';
+
+        function triggerThemeSweep(event) {
+            const overlay = document.getElementById('theme-sweep-overlay');
+            if (!overlay) return;
+            if (event && event.clientX) {
+                overlay.style.setProperty('--sweep-x', event.clientX + 'px');
+                overlay.style.setProperty('--sweep-y', event.clientY + 'px');
+            } else {
+                overlay.style.setProperty('--sweep-x', '50%');
+                overlay.style.setProperty('--sweep-y', '20%');
+            }
+            overlay.classList.remove('sweeping');
+            void overlay.offsetWidth;
+            overlay.classList.add('sweeping');
+        }
+
+        function applyResolvedAppearance(mode) {
+            const html = document.documentElement;
+            let isLight = false;
+            if (mode === 'light') isLight = true;
+            else if (mode === 'system') isLight = !window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (isLight) { html.classList.add('light-mode'); html.classList.remove('dark'); }
+            else { html.classList.remove('light-mode'); html.classList.add('dark'); }
+
+            document.querySelectorAll('.mode-pill').forEach(btn => {
+                if (btn.dataset.modeBtn === mode) btn.classList.add('bg-accent-soft', 'border-accent');
+                else btn.classList.remove('bg-accent-soft', 'border-accent');
+            });
+        }
+
+        function setAppearanceMode(mode, event, silent = false) {
+            currentMode = mode;
+            localStorage.setItem('amoshii_mode', mode);
+            if (!silent) triggerThemeSweep(event);
+            applyResolvedAppearance(mode);
+            if (!silent) showToast('Appearance Updated', `Switched to ${mode} mode.`);
+        }
+
+        function setThemeStyle(themeSlug, themeLabel, event, silent = false) {
+            currentTheme = themeSlug;
+            localStorage.setItem('amoshii_theme', themeSlug);
+            if (!silent) triggerThemeSweep(event);
+            document.body.setAttribute('data-theme', themeSlug);
+            if (!silent) showToast(`Theme: ${themeLabel}`, `Applied ${themeLabel} visual palette.`);
+        }
+
+        function toggleSettingsDrawer(open) {
+            const drawer = document.getElementById('settings-drawer');
+            if (open) { drawer.classList.remove('hidden'); drawer.classList.add('flex'); }
+            else { drawer.classList.add('hidden'); drawer.classList.remove('flex'); }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active', 'bg-accent-soft', 'border-accent');
+                    btn.style.color = '';
+                } else {
+                    btn.classList.remove('active', 'bg-accent-soft', 'border-accent');
+                    btn.style.color = 'var(--text-muted)';
+                }
+            });
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+            const activePanel = document.getElementById('tab-' + tabId);
+            if (activePanel) activePanel.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function formatAmount(kesAmount) {
+            if (currentCurrency === 'KES') return `${Number(kesAmount).toLocaleString()} KES`;
+            return `$${(Number(kesAmount) / KES_PER_USD).toFixed(2)} USD`;
+        }
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            const btnKes = document.getElementById('curr-kes');
+            const btnUsd = document.getElementById('curr-usd');
+            if (curr === 'KES') {
+                btnKes.className = 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all bg-accent';
+                btnUsd.className = 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all';
+                btnUsd.style.color = 'var(--text-muted)';
+            } else {
+                btnUsd.className = 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all bg-accent';
+                btnKes.className = 'px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all';
+                btnKes.style.color = 'var(--text-muted)';
+            }
+            document.querySelectorAll('.price-val').forEach(el => {
+                el.textContent = formatAmount(parseFloat(el.dataset.kes));
+            });
+            updateCoffeeButtonLabel();
+        }
+
+        function orderWhatsApp(itemName, kesPrice) {
+            const msg = `Hello Amoshii Core! I would like to order: *${itemName}* (${formatAmount(kesPrice)}). Please share activation details.`;
+            window.open(`https://wa.me/${MAIN_WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        /* OTP Configurator */
+        const OTP_SITES = [
+            'WhatsApp', 'Telegram', 'Amazon', 'Uber', 'TikTok', 'Truecaller', 'Netflix',
+            'Instagram', 'Twitter/X', 'Google', 'Facebook', 'Snapchat', 'Discord', 'PayPal', 'Spotify', 'LinkedIn'
+        ];
+
+        const OTP_COUNTRIES = [
+            "Kenya (+254)", "United States (+1)", "United Kingdom (+44)", "Canada (+1)", "South Africa (+27)",
+            "Nigeria (+234)", "Tanzania (+255)", "Uganda (+256)", "United Arab Emirates (+971)", "India (+91)",
+            "Germany (+49)", "France (+33)", "Netherlands (+31)", "Brazil (+55)", "Australia (+61)",
+            "Russia (+7)", "Ukraine (+380)", "Philippines (+63)", "Indonesia (+62)", "Malaysia (+60)",
+            "Egypt (+20)", "Morocco (+212)", "Ghana (+233)", "Rwanda (+250)", "Ethiopia (+251)",
+            "Saudi Arabia (+966)", "Turkey (+90)", "Italy (+39)", "Spain (+34)", "Poland (+48)",
+            "Romania (+40)", "Sweden (+46)", "Norway (+47)", "Switzerland (+41)", "Japan (+81)",
+            "South Korea (+82)", "Singapore (+65)", "Thailand (+66)", "Vietnam (+84)", "Mexico (+52)",
+            "Argentina (+54)", "Colombia (+57)", "Chile (+56)", "Pakistan (+92)", "Bangladesh (+880)",
+            "Israel (+972)", "Portugal (+351)", "Greece (+30)", "Ireland (+353)", "New Zealand (+64)", "Kazakhstan (+7)", "Estonia (+372)"
+        ];
+
+        let selectedOtpSite = OTP_SITES[0];
+
+        function initOtpBuilder() {
+            const siteGrid = document.getElementById('otp-site-grid');
+            if (!siteGrid) return;
+            siteGrid.innerHTML = OTP_SITES.map((s, idx) => `
+                <button type="button" onclick="selectOtpSite('${s}', this)" class="otp-site-btn p-2.5 rounded-xl border text-left text-xs font-bold transition-all ${idx === 0 ? 'border-accent bg-accent-soft' : 'theme-surface'}">
+                    <span class="truncate">${s}</span>
+                </button>
+            `).join('');
+
+            const dropdown = document.getElementById('otp-country-dropdown');
+            if (dropdown) {
+                dropdown.innerHTML = OTP_COUNTRIES.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+            updateOtpSummary();
+        }
+
+        function selectOtpSite(siteName, btnEl) {
+            selectedOtpSite = siteName;
+            document.querySelectorAll('.otp-site-btn').forEach(b => {
+                b.classList.remove('border-accent', 'bg-accent-soft');
+                b.classList.add('theme-surface');
+            });
+            btnEl.classList.remove('theme-surface');
+            btnEl.classList.add('border-accent', 'bg-accent-soft');
+            updateOtpSummary();
+        }
+
+        function updateOtpSummary() {
+            const dropdown = document.getElementById('otp-country-dropdown');
+            const country = dropdown ? dropdown.value : OTP_COUNTRIES[0];
+            document.getElementById('otp-selected-summary').textContent = `${selectedOtpSite} • ${country}`;
+        }
+
+        function sendOtpToWhatsApp() {
+            const dropdown = document.getElementById('otp-country-dropdown');
+            const country = dropdown ? dropdown.value : OTP_COUNTRIES[0];
+            const msg = `Hello Amoshii Core! I need an OTP verification number for *${selectedOtpSite}* from *${country}*. What is the price?`;
+            window.open(`https://wa.me/${MAIN_WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        /* SMM Builder */
+        const SMM_CATALOG = {
+            'Instagram': ['Followers', 'Likes', 'Views', 'Comments', 'Shares', 'Reposts'],
+            'TikTok': ['Followers', 'Likes', 'Views', 'Comments', 'Shares', 'Saves'],
+            'Facebook': ['Page Likes', 'Post Likes', 'Reels Views', 'Reactions', 'Comments', 'Shares'],
+            'YouTube': ['Subscribers', 'Views', 'Likes', 'Comments', 'Shares', 'Watch Time'],
+            'WhatsApp': ['Channel Followers', 'Channel Reactions'],
+            'X (Twitter)': ['Followers', 'Likes', 'Reposts', 'Views', 'Comments'],
+            'Telegram': ['Members', 'Views', 'Reactions', 'Shares'],
+            'Spotify': ['Followers', 'Streams']
+        };
+
+        let selectedSmmPlatform = 'Instagram';
+        let selectedSmmTier = 'CHEAP';
+
+        function initSmmBuilder() {
+            const grid = document.getElementById('smm-platform-grid');
+            if (!grid) return;
+            const platforms = Object.keys(SMM_CATALOG);
+            grid.innerHTML = platforms.map((p, idx) => `
+                <button type="button" onclick="selectSmmPlatform('${p}', this)" class="smm-plat-btn p-3 rounded-2xl border flex flex-col items-center justify-center gap-1.5 text-xs font-bold transition-all ${idx === 0 ? 'border-accent bg-accent-soft' : 'theme-surface'}">
+                    <span>${p}</span>
+                </button>
+            `).join('');
+            populateSmmServices('Instagram');
+        }
+
+        function selectSmmPlatform(platform, btnEl) {
+            selectedSmmPlatform = platform;
+            document.querySelectorAll('.smm-plat-btn').forEach(b => {
+                b.classList.remove('border-accent', 'bg-accent-soft');
+                b.classList.add('theme-surface');
+            });
+            btnEl.classList.remove('theme-surface');
+            btnEl.classList.add('border-accent', 'bg-accent-soft');
+            populateSmmServices(platform);
+        }
+
+        function populateSmmServices(platform) {
+            const select = document.getElementById('smm-service-select');
+            const services = SMM_CATALOG[platform];
+            select.innerHTML = services.map(srv => `<option value="${srv}">${platform} — ${srv}</option>`).join('');
+            updateSmmPreview();
+        }
+
+        function setSmmTier(tier) {
+            selectedSmmTier = tier;
+            const cheapBtn = document.getElementById('tier-cheap');
+            const nondropBtn = document.getElementById('tier-nondrop');
+            if (tier === 'CHEAP') {
+                cheapBtn.className = 'p-3 rounded-2xl border text-left transition-all border-accent bg-accent-soft';
+                nondropBtn.className = 'p-3 rounded-2xl border text-left transition-all theme-surface';
+            } else {
+                nondropBtn.className = 'p-3 rounded-2xl border text-left transition-all border-accent bg-accent-soft';
+                cheapBtn.className = 'p-3 rounded-2xl border text-left transition-all theme-surface';
+            }
+            updateSmmPreview();
+        }
+
+        function updateSmmPreview() {
+            const service = document.getElementById('smm-service-select').value;
+            const qty = document.getElementById('smm-qty-input').value.trim();
+            const qtyText = qty ? ` • Qty: ${qty}` : '';
+            document.getElementById('smm-summary-text').textContent = `${selectedSmmPlatform} • ${service} (${selectedSmmTier} Tier)${qtyText}`;
+        }
+
+        function sendSmmToWhatsApp() {
+            const service = document.getElementById('smm-service-select').value;
+            const qty = document.getElementById('smm-qty-input').value.trim();
+            const link = document.getElementById('smm-link-input').value.trim();
+            let msg = `Hello Amoshii Core! I want to order SMM service: *${selectedSmmPlatform} - ${service}* (*${selectedSmmTier}* tier).`;
+            if (qty) msg += ` Quantity: *${qty}*.`;
+            if (link) msg += ` Target: ${link}.`;
+            msg += ` Please let me know the price!`;
+            window.open(`https://wa.me/${MAIN_WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        /* YouTube Mix Player */
+        function playMix(embedId, title, watchUrl) {
+            const iframe = document.getElementById('dj-yt-iframe');
+            const ytBtn = document.getElementById('watch-on-yt-btn');
+            if (iframe) iframe.src = `https://www.youtube.com/embed/${embedId}`;
+            if (ytBtn) ytBtn.href = watchUrl;
+            showToast('Now Playing', title);
+        }
+
+        let selectedCoffeeKes = 150;
+        let selectedCoffeeLabel = '1 Coffee';
+
+        function selectCoffeeTier(kes, label) {
+            selectedCoffeeKes = kes;
+            selectedCoffeeLabel = label;
+            document.querySelectorAll('.coffee-tier-btn').forEach(btn => {
+                if (btn.textContent.includes(label)) btn.className = 'coffee-tier-btn py-2.5 px-2 rounded-xl font-mono font-bold text-xs border border-accent bg-accent-soft';
+                else btn.className = 'coffee-tier-btn py-2.5 px-2 rounded-xl font-mono font-bold text-xs theme-surface';
+            });
+            updateCoffeeButtonLabel();
+        }
+
+        function updateCoffeeButtonLabel() {
+            const btnLabel = document.getElementById('coffee-wa-label');
+            if (btnLabel) btnLabel.textContent = `Support via M-Pesa / WhatsApp (${formatAmount(selectedCoffeeKes)})`;
+        }
+
+        function supportViaWhatsApp() {
+            const name = document.getElementById('coffee-supporter-name').value.trim() || 'Supporter';
+            const msg = `Hello DJ Prince Amonje! ☕ I want to Buy You a Coffee (${selectedCoffeeLabel} - ${formatAmount(selectedCoffeeKes)}) from *${name}*!`;
+            window.open(`https://wa.me/${MAIN_WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        /* AI Assistant */
+        function toggleAiChat() {
+            const win = document.getElementById('ai-chat-window');
+            if (win.classList.contains('hidden')) { win.classList.remove('hidden'); win.classList.add('flex'); }
+            else { win.classList.add('hidden'); win.classList.remove('flex'); }
+        }
+
+        function appendAiMessage(htmlContent, isUser = false) {
+            const box = document.getElementById('ai-messages');
+            const wrapper = document.createElement('div');
+            wrapper.className = isUser ? 'p-3 rounded-2xl rounded-tr-none gradient-accent font-semibold ml-auto max-w-[85%]' : 'p-3 rounded-2xl rounded-tl-none theme-input max-w-[92%] space-y-2';
+            wrapper.innerHTML = htmlContent;
+            box.appendChild(wrapper);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function getAgentEscalationCard(userQuery) {
+            const encoded = encodeURIComponent(`Hello Amoshii Core! I need agent help with: "${userQuery}"`);
+            return `
+                <div class="p-2.5 rounded-xl theme-surface border-accent space-y-2 mt-1.5">
+                    <div class="text-[11px] font-bold text-accent"><i class="fa-solid fa-headset mr-1"></i>Connect to WhatsApp Agents:</div>
+                    <div class="grid grid-cols-1 gap-1.5">
+                        <a href="https://wa.me/${MAIN_WA}?text=${encoded}" target="_blank" class="py-2 px-3 rounded-lg bg-emerald-500 text-slate-950 font-extrabold text-[11px] flex items-center justify-center gap-1.5">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Main Agent: 0706181234
+                        </a>
+                        <a href="https://wa.me/${BACKUP_WA}?text=${encoded}" target="_blank" class="py-2 px-3 rounded-lg theme-input hover:border-accent font-bold text-[11px] flex items-center justify-center gap-1.5">
+                            <i class="fa-brands fa-whatsapp text-teal-400 text-sm"></i> Backup Agent: 0781237875
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAiResponse(query) {
+            const q = query.toLowerCase();
+            if (q.includes('apk') || q.includes('install') || q.includes('cricfy') || q.includes('sportzfy')) {
+                return `<div><strong>📱 APK Install Help:</strong> If Play Protect blocks it, tap More Details → Install Anyway. Need direct support?</div>${getAgentEscalationCard(query)}`;
+            }
+            if (q.includes('price') || q.includes('netflix') || q.includes('bot') || q.includes('billing')) {
+                return `<div><strong>💳 Quick Pricing:</strong> Netflix (300 KES/mo), Prime (200 KES/mo), Normal Bot (100 KES), Bug Bot (150 KES).</div>${getAgentEscalationCard(query)}`;
+            }
+            return `<div><strong>🤝 Live Agent Assistance:</strong> For complex requests, please message Amoshii directly:</div>${getAgentEscalationCard(query)}`;
+        }
+
+        function handleAiSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const text = input.value.trim();
+            if (!text) return;
+            appendAiMessage(text, true);
+            input.value = '';
+            setTimeout(() => { appendAiMessage(generateAiResponse(text), false); }, 350);
+        }
+
+        function copyText(text, title) {
+            const temp = document.createElement('input');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(title, text);
+        }
+
+        let toastTimer;
+        function showToast(title, sub) {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-sub').textContent = sub;
+            box.classList.remove('hidden'); box.classList.add('flex');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { box.classList.add('hidden'); box.classList.remove('flex'); }, 3200);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setAppearanceMode(currentMode, null, true);
+            setThemeStyle(currentTheme, currentTheme, null, true);
+            initOtpBuilder();
+            initSmmBuilder();
+            updateCoffeeButtonLabel();
+        });
+    </script>
+</body>
+</html>
